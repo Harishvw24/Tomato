@@ -1,6 +1,17 @@
 //Load environment variables
 import dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, ".env"), override: true });
+
+console.log("Cloudinary env present:", {
+    CLOUDINARY_CLOUD_NAME: Boolean(process.env.CLOUDINARY_CLOUD_NAME),
+    CLOUDINARY_API_KEY: Boolean(process.env.CLOUDINARY_API_KEY),
+    CLOUDINARY_API_SECRET: Boolean(process.env.CLOUDINARY_API_SECRET),
+});
 
 import express from "express"
 import cors from "cors"

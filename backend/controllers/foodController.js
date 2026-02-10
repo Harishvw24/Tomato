@@ -1,22 +1,16 @@
 import foodModel from "../models/foodModel.js";
-import cloudinary from "../config/cloudinary.js";
-
-const uploadToCloudinary = (buffer) =>
-    new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-            { folder: "food-del" },
-            (error, result) => {
-                if (error) return reject(error);
-                resolve(result);
-            }
-        );
-
-        stream.end(buffer);
-    });
+import { uploadToCloudinary, deleteFromCloudinary } from "../services/uploadService.js";
 
 //add food-item
 const addFood = async (req, res) => {
     try {
+        if (!req.file) {
+            return res.json({
+                success: false,
+                message: "Image file is required"
+            });
+        }
+
         const uploadResult = await uploadToCloudinary(req.file.buffer);
 
         const food = new foodModel({
@@ -30,15 +24,15 @@ const addFood = async (req, res) => {
 
         await food.save();
         res.json({
-            success: "true",
+            success: true,
             message: "Item is added"
         });
     }
     catch (error) {
-        console.log(error);
+        console.error("Error adding food:", error);
         res.json({
-            success: "false",
-            message: "Error"
+            success: false,
+            message: error?.message || "Error adding food"
         });
     }
 }
@@ -57,7 +51,7 @@ const listFood = async (req, res) => {
         console.log(error);
         res.json({
             success: false,
-            message: error
+            message: "Error fetching food list"
         })
     }
 }
@@ -69,9 +63,11 @@ const removeFood = async (req, res) => {
         if (!food) {
             return res.json({ success: false, message: "Food not found" });
         }
+
         if (food.imagePublicId) {
-            await cloudinary.uploader.destroy(food.imagePublicId);
+            await deleteFromCloudinary(food.imagePublicId);
         }
+
         await foodModel.findByIdAndDelete(req.body.id);
         res.json({
             success: true,
@@ -82,7 +78,7 @@ const removeFood = async (req, res) => {
         console.log(error);
         res.json({
             success: false,
-            message: error
+            message: "Error removing food"
         })
     }
 }
