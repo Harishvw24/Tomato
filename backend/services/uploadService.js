@@ -18,7 +18,7 @@ export const uploadToCloudinary = (buffer) => {
             (error, result) => {
                 if (error) {
                     console.error("Cloudinary Upload Error:", error);
-                    return reject(new Error("Image upload failed"));
+                    return reject(new Error(error?.message || "Image upload failed"));
                 }
                 resolve(result);
             }
