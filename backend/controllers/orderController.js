@@ -3,7 +3,7 @@ import userModel from "../models/userModel.js";
 import Stripe from 'stripe';
 
 const placeOrder = async (req, res) => {
-    const frontenndUrl = 'http://localhost:5174';
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     
     try {
         // ✅ FIX 1: Add null check for req.user
@@ -56,8 +56,8 @@ const placeOrder = async (req, res) => {
         const session = await stripe.checkout.sessions.create({
             line_items: line_items,
             mode: 'payment',
-            success_url: `${frontenndUrl}/verify?success=true&orderId=${newOrder._id}`,
-            cancel_url: `${frontenndUrl}/verify?success=false&orderId=${newOrder._id}`,
+            success_url: `${frontendUrl}/verify?success=true&orderId=${newOrder._id}`,
+            cancel_url: `${frontendUrl}/verify?success=false&orderId=${newOrder._id}`,
         });
         
         res.json({success: true, session_url: session.url});
