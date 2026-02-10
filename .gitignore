@@ -5,6 +5,10 @@
 **/dist/
 **/build/
 
+# Env files
+.env
+.env.*
+
 # Runtime uploads
 backend/uploads/
 

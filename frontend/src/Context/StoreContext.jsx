@@ -9,6 +9,7 @@ const StoreContextProvider = (props) => {
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
   const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
+  axios.defaults.baseURL = url;
 
   const addToCart = async (itemId) => {
     let updatedCart;
