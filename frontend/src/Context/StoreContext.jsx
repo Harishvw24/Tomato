@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 // eslint-disable-next-line react-refresh/only-export-components
 export const StoreContext = createContext(null);
@@ -8,7 +8,7 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
-  const url = "http://localhost:4000";
+  const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   const addToCart = async (itemId) => {
     let updatedCart;
@@ -69,14 +69,14 @@ const StoreContextProvider = (props) => {
     setFoodList(response.data.data);
   }
 
-  const loadCartData = async (userToken) => {
+  const loadCartData = useCallback(async (userToken) => {
     if (userToken) {
       const response = await axios.post(url + "/api/cart/get", {}, { headers: { token: userToken } });
       setCartItems(response.data.cartData);
       // Clear localStorage when user logs in
       localStorage.removeItem("cartItems");
     }
-  }
+  }, [url])
 
   useEffect(() => {
     async function loadData() {
@@ -101,9 +101,11 @@ const StoreContextProvider = (props) => {
   useEffect(() => {
     if (token && token !== "") {
       // Token was set (user signed in)
-      loadCartData(token);
+      (async () => {
+        await loadCartData(token);
+      })();
     }
-  }, [token])
+  }, [token, loadCartData])
 
   const contextValue = {
     food_list,
