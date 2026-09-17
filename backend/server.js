@@ -47,7 +47,7 @@ app.get("/",(req,res)=>{
     res.send("Hari your backend server is working")
 })
 
-app.listen(port,()=>{
+app.listen(port,"0.0.0.0",()=>{
     console.log(`Server started on http://localhost:${port}`)
 })
 
