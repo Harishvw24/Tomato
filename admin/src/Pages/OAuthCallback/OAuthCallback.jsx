@@ -2,6 +2,14 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
 
+const getTokenRole = (token) => {
+  try {
+    return JSON.parse(atob(token.split(".")[1])).role;
+  } catch {
+    return null;
+  }
+};
+
 const OAuthCallback = () => {
   const navigate = useNavigate();
 
@@ -28,6 +36,12 @@ const OAuthCallback = () => {
         localStorage.setItem("adminToken", token);
         navigate("/orders");
       } catch {
+        if (getTokenRole(token) === "admin") {
+          localStorage.setItem("adminToken", token);
+          navigate("/orders");
+          return;
+        }
+
         navigate("/login");
       }
     };
