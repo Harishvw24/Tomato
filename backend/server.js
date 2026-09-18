@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, ".env"), override: true });
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 console.log("Cloudinary env present:", {
     CLOUDINARY_CLOUD_NAME: Boolean(process.env.CLOUDINARY_CLOUD_NAME),
@@ -20,16 +20,25 @@ import foodRouter from "./routes/foodRoute.js"
 import userRouter from "./routes/userRouter.js"
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
+import passport from "passport";
+import "./config/passport.js";
 
 //App Configuration
 
 const app=express()
-const port = process.env.PORT || 4000
+const port = process.env.PORT
+const allowedOrigins = [
+    process.env.CUSTOMER_URL || process.env.FRONTEND_URL,
+    process.env.ADMIN_URL
+].filter(Boolean)
 
 //middleware
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: allowedOrigins
+}))
+app.use(passport.initialize());
 
 //MongoDB connection
 
@@ -48,7 +57,7 @@ app.get("/",(req,res)=>{
 })
 
 app.listen(port,"0.0.0.0",()=>{
-    console.log(`Server started on http://localhost:${port}`)
+    console.log(`Server started on http://${process.env.HOST}:${port}`)
 })
 
 //mongodb+srv://hari:ZFCoP8THmzdZNjs1@cluster0.wb3zv7j.mongodb.net/?

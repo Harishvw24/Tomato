@@ -9,6 +9,7 @@ import axios from 'axios'
 const LoginPopup = ({ setShowLogin }) => {
 
   const [currState, setCurrState] = useState("Login");
+  const [role, setRole] = useState("customer");
   const { url, setToken } = useContext(StoreContext);
   const [data, setData] = useState({
     name: "",
@@ -23,6 +24,12 @@ const LoginPopup = ({ setShowLogin }) => {
 
   const onLogin = async (event) => {
     event.preventDefault();
+
+    if (currState === "Sign Up" && role === "admin") {
+      alert("Admin accounts must be created by an existing administrator.");
+      return;
+    }
+
     let newUrl = url;
     if (currState === "Login") {
       newUrl += "/api/user/login";
@@ -30,14 +37,40 @@ const LoginPopup = ({ setShowLogin }) => {
     else {
       newUrl += "/api/user/register";
     }
-    const response = await axios.post(newUrl, data);
-    if (response.data.success) {
-      setToken(response.data.token);
-      localStorage.setItem("token", response.data.token);
-      setShowLogin(false);
-    }
-    else {
-      alert(response.data.message);
+    try {
+      const response = await axios.post(
+        `${newUrl}`,
+        {
+          ...data,
+          requestedRole: role
+        }
+      );
+
+      if (response.data.success) {
+        const authenticatedUser = response.data.user;
+        const authenticatedToken = response.data.token;
+
+        if (!authenticatedUser || !authenticatedToken) {
+          alert("The server returned an incomplete login response.");
+          return;
+        }
+
+        if (authenticatedUser.role === "customer") {
+          localStorage.setItem("token", authenticatedToken);
+          setToken(authenticatedToken);
+          setShowLogin(false);
+        }
+
+        if (authenticatedUser.role === "admin") {
+          localStorage.setItem("adminToken", authenticatedToken);
+          window.location.href =
+            `${import.meta.env.VITE_ADMIN_URL}/orders`;
+        }
+      } else {
+        alert(response.data.message || "Authentication failed");
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Unable to reach the authentication server");
     }
   }
   return (
@@ -51,8 +84,31 @@ const LoginPopup = ({ setShowLogin }) => {
           {currState === "Login" ? <></> : <input name='name' onChange={onChangeHandler} value={data.name} type='text' placeholder='Your name' required />}
           <input name='email' onChange={onChangeHandler} value={data.email} type='email' placeholder='Email address' required />
           <input name='password' onChange={onChangeHandler} value={data.password} type='password' placeholder='Password' required />
+          {currState === "Login" && (
+            <label className="login-popup-role">
+              <span>Sign in as</span>
+              <select
+                value={role}
+                onChange={(event) => setRole(event.target.value)}
+              >
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </label>
+          )}
         </div>
         <button type="submit" className="login-popup-button">{currState === "Sign Up" ? "Create Account" : "Login"}</button>
+        {currState === "Login" && (
+          <button
+            type="button"
+            className="login-popup-button"
+            onClick={() => {
+              window.location.href = `${url}/api/user/google?role=${encodeURIComponent(role)}`;
+            }}
+          >
+            Continue with Google
+          </button>
+        )}
         <div className="login-popup-condition">
           <input type="checkbox" required />
           <p>I agree to the Terms of Service and Privacy Policy</p>
