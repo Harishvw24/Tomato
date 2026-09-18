@@ -3,7 +3,7 @@ import userModel from "../models/userModel.js";
 import Stripe from 'stripe';
 
 const placeOrder = async (req, res) => {
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const frontendUrl = process.env.CUSTOMER_URL || process.env.FRONTEND_URL;
     
     try {
         // ✅ FIX 1: Add null check for req.user
@@ -107,12 +107,53 @@ const userOrders = async (req, res) => {
 
 const listOrders = async (req, res) => {
    try{
-    const orders = await orderModel.find({});
+        const orders = await orderModel.find({}).sort({ date: -1 });
     res.json({success:true, data: orders});
    }
    catch(error){
     res.json({success:false, message:"Error in fetching all orders"});
    }
+}
+
+const customerSummary = async (req, res) => {
+    try {
+        const { date } = req.query;
+        const orderFilter = {};
+
+        if (date) {
+            const start = new Date(`${date}T00:00:00.000Z`);
+            const end = new Date(`${date}T23:59:59.999Z`);
+
+            if (Number.isNaN(start.getTime())) {
+                return res.json({ success: false, message: "Invalid date" });
+            }
+
+            orderFilter.date = { $gte: start, $lte: end };
+        }
+
+        const [customers, orders] = await Promise.all([
+            userModel.find({ role: "customer" }).select("name email provider").lean(),
+            orderModel.find(orderFilter).sort({ date: -1 }).lean()
+        ]);
+
+        const ordersByCustomer = orders.reduce((groups, order) => {
+            const customerId = String(order.userId);
+            if (!groups[customerId]) groups[customerId] = [];
+            groups[customerId].push(order);
+            return groups;
+        }, {});
+
+        res.json({
+            success: true,
+            data: customers.map((customer) => ({
+                ...customer,
+                orders: ordersByCustomer[String(customer._id)] || []
+            }))
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error in fetching customer summaries" });
+    }
 }
 
 const updateOrderStatus = async (req, res) => {
@@ -124,7 +165,7 @@ const updateOrderStatus = async (req, res) => {
             return res.json({ success: false, message: "Status is required" });
         }
 
-        const validStatuses = ["confirmed", "preparing", "out for delivery", "delivered"];
+        const validStatuses = ["Food Processing", "confirmed", "preparing", "out for delivery", "delivered"];
         if (!validStatuses.includes(status)) {
             return res.json({ success: false, message: "Invalid status" });
         }
@@ -141,4 +182,4 @@ const updateOrderStatus = async (req, res) => {
     }
 }
 
-export { placeOrder, verifyOrder, userOrders, listOrders, updateOrderStatus };
+export { placeOrder, verifyOrder, userOrders, listOrders, customerSummary, updateOrderStatus };

@@ -1,3 +1,50 @@
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.order-eyebrow {
+  color: tomato;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.order-header h3 {
+  margin-top: 5px;
+  color: #292929;
+  font-family: 'Outfit', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+}
+.order-filters {
+  display: flex;
+  gap: 12px;
+}
+.order-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+}
+.order-filters input,
+.order-filters select {
+  min-width: 140px;
+  padding: 9px 10px;
+  border: 1px solid #c9c9c9;
+  border-radius: 4px;
+  color: #333;
+  background: #fff;
+  font: inherit;
+}
+.order-empty {
+  padding: 30px 0;
+  color: #777;
+}
 .order-item {
   display: grid;
   grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
@@ -8,6 +55,19 @@
   margin: 30px 0px;
   font-size: 14px;
   color: #505050;
+}
+.order-total {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.order-total p {
+  color: tomato;
+  font-weight: 600;
+}
+.order-total small {
+  color: #888;
+  font-size: 12px;
 }
 .order-item-food,
 .order-item-name {
@@ -31,6 +91,10 @@
 }
 
 @media (max-width: 1000px) {
+  .order-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
   .order-item {
     font-size: 12px;
     grid-template-columns: 0.5fr 2fr 1fr;

@@ -44,6 +44,28 @@
     padding: 10px;
     border-radius: 4px; /* corrected from '4' to '4px' */
 }
+.login-popup-role {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    color: #555555;
+    font-size: 13px;
+    font-weight: 500;
+}
+.login-popup-role select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    color: #333333;
+    background-color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+}
+.login-popup-role select:focus {
+    outline: 2px solid #ff6347;
+    outline-offset: -1px;
+}
 .login-popup-container button {
     border: none;
     padding: 10px;
