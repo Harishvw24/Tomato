@@ -10,9 +10,10 @@ import OAuthCallback from './Pages/OAuthCallback/OAuthCallback';
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import Customers from './Pages/Customers/Customers';
 import AdminLogin from './Pages/Login/AdminLogin';
+import { API_URL } from './api/api';
 const App = () => {
 
-  const url = import.meta.env.VITE_API_URL;
+  const url = API_URL;
 
   return (
     <div>
@@ -45,7 +46,7 @@ const App = () => {
           <Route path="/login" element={<AdminLogin />} />
           <Route
             path="/oauth/callback"
-            element={<OAuthCallback url={url} />}
+            element={<OAuthCallback />}
           />
         </Routes>
       </div>

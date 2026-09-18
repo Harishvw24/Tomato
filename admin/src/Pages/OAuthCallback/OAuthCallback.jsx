@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/api";
 
-const OAuthCallback = ({ url }) => {
+const OAuthCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,14 +16,9 @@ const OAuthCallback = ({ url }) => {
       }
 
       try {
-        const response = await axios.get(
-          `${url}/api/user/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
+        const response = await api.get("/api/user/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
         if (response.data.user.role !== "admin") {
           navigate("/login");
@@ -38,7 +33,7 @@ const OAuthCallback = ({ url }) => {
     };
 
     finishLogin();
-  }, [navigate, url]);
+  }, [navigate]);
 
   return <p>Signing you in...</p>;
 };
