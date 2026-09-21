@@ -32,8 +32,7 @@ const allowedOrigins = [
     process.env.ADMIN_URL,
     "https://tomato-frontend2-lime.vercel.app",
     "https://tomato-admin2n.vercel.app",
-    "https://tomato-admin2n2.vercel.app",
-    "https://tomato-z8jw.vercel.app"
+    "https://tomato-admin2n2.vercel.app"
 ].filter(Boolean)
 
 const isAllowedOrigin = (origin) => {
