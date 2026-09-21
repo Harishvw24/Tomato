@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import './Orders.css'
-import axios from 'axios'
+import api from '../../api/api'
 import { toast } from 'react-toastify';
 import { assets } from '../../assets/assets';
 
@@ -19,21 +19,13 @@ const Order = ({ url }) => {
 
   const fetchAllOrders = async () => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await axios.get(`${url}/api/order/list`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get('/api/order/list');
       if (response.data.success) {
         setOrders(response.data.data);
       } else {
         toast.error(response.data.message || 'Unable to load orders');
       }
     } catch (error) {
-      if (error.response?.status === 401) {
-        localStorage.removeItem('adminToken');
-        window.location.href = '/login';
-        return;
-      }
       toast.error(error.response?.data?.message || 'Unable to load orders');
     }
   };
@@ -44,11 +36,8 @@ const Order = ({ url }) => {
 
   const statusHandler = async (event, orderId) => {
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await axios.put(`${url}/api/order/status/${orderId}`, {
+      const response = await api.put(`/api/order/status/${orderId}`, {
         status: event.target.value
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success) {
         await fetchAllOrders();

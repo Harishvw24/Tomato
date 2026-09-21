@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { toast } from 'react-toastify';
 import './Customers.css';
 
@@ -11,10 +11,8 @@ const Customers = ({ url }) => {
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('adminToken');
-      const response = await axios.get(`${url}/api/order/customer-summary`, {
-        params: date ? { date } : {},
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await api.get('/api/order/customer-summary', {
+        params: date ? { date } : {}
       });
 
       if (response.data.success) {
