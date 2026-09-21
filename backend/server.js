@@ -27,31 +27,13 @@ import "./config/passport.js";
 
 const app=express()
 const port = process.env.PORT
-const allowedOrigins = [
-    process.env.CUSTOMER_URL || process.env.FRONTEND_URL,
-    process.env.ADMIN_URL,
-    "https://tomato-frontend2-lime.vercel.app",
-    "https://tomato-admin2n.vercel.app",
-    "https://tomato-admin2n2.vercel.app"
-].filter(Boolean)
-
-const isAllowedOrigin = (origin) => {
-    if (!origin) return true;
-
-    return allowedOrigins.includes(origin) || /^https:\/\/tomato-admin2n\d*\.vercel\.app$/.test(origin);
-}
 
 //middleware
 
 app.use(express.json())
 app.use(cors({
     origin: (origin, callback) => {
-        if (isAllowedOrigin(origin)) {
-            callback(null, true);
-            return;
-        }
-
-        callback(new Error(`CORS origin is not allowed: ${origin}`));
+        callback(null, origin || true);
     }
 }))
 app.use(passport.initialize());
