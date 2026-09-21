@@ -27,13 +27,25 @@ import "./config/passport.js";
 
 const app=express()
 const port = process.env.PORT
+const allowedOrigins = (process.env.CORS_ORIGINS || [
+    process.env.CUSTOMER_URL || process.env.FRONTEND_URL,
+    process.env.ADMIN_URL
+].filter(Boolean).join(","))
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
 
 //middleware
 
 app.use(express.json())
 app.use(cors({
     origin: (origin, callback) => {
-        callback(null, origin || true);
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+
+        callback(new Error(`CORS origin is not allowed: ${origin}`));
     }
 }))
 app.use(passport.initialize());
