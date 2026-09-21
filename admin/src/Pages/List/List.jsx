@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import './List.css'
-import axios from "axios"
+import api from '../../api/api'
 import { toast } from 'react-toastify';
 const List = ({url}) => {
   const [list,setList]=useState([]);
   const fetchList = useCallback(async () => {
-    const response = await axios.get(`${url}/api/food/list`);
+    const response = await api.get('/api/food/list');
     if (response.data.success) {
       setList(response.data.data);
     } else {
       toast.error("error");
     }
-  }, [url]);
+  }, []);
   const removeFood= async(foodId) =>{
-     const response= await axios.post(`${url}/api/food/remove`,{id:foodId});
+      const response = await api.post('/api/food/remove',{id:foodId});
      await fetchList();
      if(response.data.success){
       toast.success(response.data.message);
