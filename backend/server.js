@@ -30,6 +30,7 @@ const port = process.env.PORT
 const allowedOrigins = [
     process.env.CUSTOMER_URL || process.env.FRONTEND_URL,
     process.env.ADMIN_URL,
+    "https://tomato-frontend2-lime.vercel.app",
     "https://tomato-admin2n.vercel.app",
     "https://tomato-admin2n2.vercel.app",
     "https://tomato-z8jw.vercel.app"
