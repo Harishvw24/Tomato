@@ -64,7 +64,7 @@ const LoginPopup = ({ setShowLogin }) => {
         if (authenticatedUser.role === "admin") {
           localStorage.setItem("adminToken", authenticatedToken);
           window.location.href =
-            `${import.meta.env.VITE_ADMIN_URL || "https://tomato-admin2n2.vercel.app"}/orders`;
+            `${import.meta.env.VITE_ADMIN_URL || "http://localhost:5181"}/orders`;
         }
       } else {
         alert(response.data.message || "Authentication failed");
