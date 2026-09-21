@@ -35,12 +35,18 @@ const allowedOrigins = (process.env.CORS_ORIGINS || [
     .map((origin) => origin.trim())
     .filter(Boolean)
 
+const isAllowedOrigin = (origin) => {
+    return !origin
+        || allowedOrigins.includes(origin)
+        || /^https:\/\/tomato-(frontend|admin)[a-z0-9-]*\.vercel\.app$/.test(origin)
+}
+
 //middleware
 
 app.use(express.json())
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (isAllowedOrigin(origin)) {
             callback(null, true);
             return;
         }
