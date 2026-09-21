@@ -29,7 +29,9 @@ const app=express()
 const port = process.env.PORT
 const allowedOrigins = [
     process.env.CUSTOMER_URL || process.env.FRONTEND_URL,
-    process.env.ADMIN_URL || "https://tomato-z8jw.vercel.app"
+    process.env.ADMIN_URL,
+    "https://tomato-admin2n.vercel.app",
+    "https://tomato-z8jw.vercel.app"
 ].filter(Boolean)
 
 //middleware
