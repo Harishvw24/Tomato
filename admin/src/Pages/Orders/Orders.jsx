@@ -29,6 +29,11 @@ const Order = ({ url }) => {
         toast.error(response.data.message || 'Unable to load orders');
       }
     } catch (error) {
+      if (error.response?.status === 401) {
+        localStorage.removeItem('adminToken');
+        window.location.href = '/login';
+        return;
+      }
       toast.error(error.response?.data?.message || 'Unable to load orders');
     }
   };
