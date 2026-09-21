@@ -2,7 +2,7 @@ import React from 'react';
 import './AdminLogin.css';
 
 const AdminLogin = () => {
-  const customerUrl = import.meta.env.VITE_CUSTOMER_URL;
+  const customerUrl = import.meta.env.VITE_CUSTOMER_URL || 'https://tomato-frontend2-lime.vercel.app';
 
   return (
     <main className="admin-login">
