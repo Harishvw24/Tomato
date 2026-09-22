@@ -8,8 +8,7 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
-  const url = import.meta.env.VITE_API_URL;
-  axios.defaults.baseURL = url;
+  const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   const addToCart = async (itemId) => {
     let updatedCart;
@@ -51,7 +50,7 @@ const StoreContextProvider = (props) => {
     }
   }
 
-  const getTotalCartAmount = () => {
+  const getTotalCartAmount = useCallback(() => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
@@ -63,12 +62,12 @@ const StoreContextProvider = (props) => {
       }
     }
     return totalAmount;
-  }
+  }, [cartItems, food_list]);
 
-  const fetchFoodList = async () => {
+  const fetchFoodList = useCallback(async () => {
     const response = await axios.get(url + "/api/food/list");
     setFoodList(response.data.data);
-  }
+  }, [url]);
 
   const loadCartData = useCallback(async (userToken) => {
     if (userToken) {
@@ -97,7 +96,7 @@ const StoreContextProvider = (props) => {
       }
     }
     loadData();
-  }, [])
+  }, [fetchFoodList, loadCartData])
 
   useEffect(() => {
     if (token && token !== "") {

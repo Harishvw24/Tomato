@@ -23,8 +23,10 @@ const List = ({url}) => {
      }
   }
   useEffect(()=>{
+    // The fetch updates state asynchronously after the request completes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchList();
-  },[])
+  },[fetchList])
   return (
     <div className='list add flex-col'>
       <p>All Foods List</p>

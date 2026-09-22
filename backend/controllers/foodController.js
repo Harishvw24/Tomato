@@ -1,3 +1,7 @@
+import {
+    getAllFoods
+} from "../services/foodService.js";
+import { deleteCache } from "../services/cacheService.js";
 import foodModel from "../models/foodModel.js";
 import { uploadToCloudinary, deleteFromCloudinary } from "../services/uploadService.js";
 
@@ -23,6 +27,7 @@ const addFood = async (req, res) => {
         });
 
         await food.save();
+        await deleteCache("food:list");
         res.json({
             success: true,
             message: "Item is added"
@@ -41,7 +46,7 @@ const addFood = async (req, res) => {
 
 const listFood = async (req, res) => {
     try {
-        const foods = await foodModel.find({});
+        const foods = await getAllFoods();
         res.json({
             success: true,
             data: foods
@@ -69,6 +74,7 @@ const removeFood = async (req, res) => {
         }
 
         await foodModel.findByIdAndDelete(req.body.id);
+        await deleteCache("food:list");
         res.json({
             success: true,
             message: "food is removed"

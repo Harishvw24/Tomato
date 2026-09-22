@@ -3,7 +3,7 @@ import api from '../../api/api';
 import { toast } from 'react-toastify';
 import './Customers.css';
 
-const Customers = ({ url }) => {
+const Customers = () => {
   const [customers, setCustomers] = useState([]);
   const [date, setDate] = useState('');
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,7 @@ const Customers = ({ url }) => {
     } finally {
       setLoading(false);
     }
-  }, [date, url]);
+  }, [date]);
 
   useEffect(() => {
     fetchCustomers();
