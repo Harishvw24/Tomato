@@ -15,8 +15,17 @@ const app = express();
 const defaultOrigins = [
   "http://localhost:5180",
   "http://localhost:5181",
-  "http://localhost:5173"
+  "http://localhost:5173",
+  "https://tomato-frontend2-lime.vercel.app"
 ];
+
+const normalizeOrigin = (origin) => {
+  if (!origin) {
+    return "";
+  }
+
+  return origin.trim().replace(/\/+$/, "");
+};
 
 const configuredOrigins = [
   process.env.FRONTEND_URL,
@@ -27,14 +36,14 @@ const configuredOrigins = [
 
 const allowedOrigins = [...defaultOrigins, ...configuredOrigins]
   .filter(Boolean)
-  .map((origin) => origin.trim())
+  .map(normalizeOrigin)
   .filter(Boolean);
 
 app.use(express.json({ limit: "1mb" }));
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) {
       return callback(null, true);
     }
 
