@@ -18,6 +18,8 @@ const MyOrders = () => {
 
     useEffect(()=>{
        if(token){
+        // The fetch updates state asynchronously after the request completes.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchOrders();
        }
     },[token,fetchOrders])

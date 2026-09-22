@@ -1,6 +1,14 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import Stripe from 'stripe';
+import { deleteCachePattern, getCache, setCache } from "../services/cacheService.js";
+
+const ORDER_CACHE_TTL_SECONDS = 30;
+const USER_ORDER_CACHE_TTL_SECONDS = 60;
+
+const invalidateOrderCaches = async () => {
+    await deleteCachePattern("orders:*");
+};
 
 const placeOrder = async (req, res) => {
     const frontendUrl = process.env.CUSTOMER_URL || process.env.FRONTEND_URL;
@@ -30,6 +38,7 @@ const placeOrder = async (req, res) => {
         
         await newOrder.save();
         await userModel.findByIdAndUpdate(req.user._id, {cartData: {}});
+        await invalidateOrderCaches();
 
         const line_items = req.body.items.map((item) => ({
             price_data: {
@@ -74,10 +83,12 @@ const verifyOrder = async (req, res) => {
         // Handle both string and boolean values
         if(success === 'true' || success === true){
             await orderModel.findByIdAndUpdate(orderId, {payment: true});
+            await invalidateOrderCaches();
             res.json({success:true, message:"Payment Successful"});
         } else {
             const result = await orderModel.findByIdAndDelete(orderId);
             if(result) {
+                await invalidateOrderCaches();
                 res.json({success:true, message:"Payment Failed, Order Cancelled"});
             } else {
                 res.json({success:false, message:"Order not found"});
@@ -94,7 +105,15 @@ const verifyOrder = async (req, res) => {
 
 const userOrders = async (req, res) => {
      try{
-        const orders = await orderModel.find({userId: req.user._id});
+        const cacheKey = `orders:user:${req.user._id}`;
+        const cachedOrders = await getCache(cacheKey);
+
+        if (cachedOrders) {
+            return res.json({success:true, data: cachedOrders});
+        }
+
+        const orders = await orderModel.find({userId: req.user._id}).lean();
+        await setCache(cacheKey, orders, USER_ORDER_CACHE_TTL_SECONDS);
         res.json({success:true, data: orders});
      }
      catch(error){
@@ -107,7 +126,15 @@ const userOrders = async (req, res) => {
 
 const listOrders = async (req, res) => {
    try{
-        const orders = await orderModel.find({}).sort({ date: -1 });
+        const cacheKey = "orders:admin:list";
+        const cachedOrders = await getCache(cacheKey);
+
+        if (cachedOrders) {
+            return res.json({success:true, data: cachedOrders});
+        }
+
+        const orders = await orderModel.find({}).sort({ date: -1 }).lean();
+        await setCache(cacheKey, orders, ORDER_CACHE_TTL_SECONDS);
     res.json({success:true, data: orders});
    }
    catch(error){
@@ -131,6 +158,13 @@ const customerSummary = async (req, res) => {
             orderFilter.date = { $gte: start, $lte: end };
         }
 
+        const cacheKey = `orders:admin:summary:${date || "all"}`;
+        const cachedSummary = await getCache(cacheKey);
+
+        if (cachedSummary) {
+            return res.json({ success: true, data: cachedSummary });
+        }
+
         const [customers, orders] = await Promise.all([
             userModel.find({ role: "customer" }).select("name email provider").lean(),
             orderModel.find(orderFilter).sort({ date: -1 }).lean()
@@ -143,12 +177,16 @@ const customerSummary = async (req, res) => {
             return groups;
         }, {});
 
-        res.json({
-            success: true,
-            data: customers.map((customer) => ({
+        const summary = customers.map((customer) => ({
                 ...customer,
                 orders: ordersByCustomer[String(customer._id)] || []
-            }))
+            }));
+
+        await setCache(cacheKey, summary, ORDER_CACHE_TTL_SECONDS);
+
+        res.json({
+            success: true,
+            data: summary
         });
     } catch (error) {
         console.log(error);
@@ -174,6 +212,8 @@ const updateOrderStatus = async (req, res) => {
         if (!updated) {
             return res.json({ success: false, message: "Order not found" });
         }
+
+        await invalidateOrderCaches();
 
         res.json({ success: true, message: "Order status updated", data: updated });
     } catch (error) {

@@ -10,6 +10,7 @@ import LoginPopup from './components/LoginPopup/LoginPopup'
 import Verify from './pages/Verify/Verify.jsx'
 import MyOrders from './pages/MyOrders/MyOrders.jsx'
 import OAuthCallback from './pages/OAuthCallback/OAuthCallback.jsx'
+import Chatbot from './components/Chatbot/Chatbot.jsx'
 const App = () => {
 
   const[showLogin, setShowLogin] = useState(false);
@@ -31,6 +32,7 @@ const App = () => {
             element={<OAuthCallback />} />
         </Routes>
       </div>
+      <Chatbot setShowLogin={setShowLogin} />
       <Footer />
     </>
   )

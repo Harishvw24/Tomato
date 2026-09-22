@@ -1,79 +1,37 @@
-//Load environment variables
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, ".env") });
 
-console.log("Cloudinary env present:", {
-    CLOUDINARY_CLOUD_NAME: Boolean(process.env.CLOUDINARY_CLOUD_NAME),
-    CLOUDINARY_API_KEY: Boolean(process.env.CLOUDINARY_API_KEY),
-    CLOUDINARY_API_SECRET: Boolean(process.env.CLOUDINARY_API_SECRET),
+dotenv.config({
+  path: path.join(__dirname, ".env")
 });
 
-import express from "express"
-import cors from "cors"
-import { connectDB } from "./config/db.js"
-import foodRouter from "./routes/foodRoute.js"
-import userRouter from "./routes/userRouter.js"
-import cartRouter from "./routes/cartRoute.js";
-import orderRouter from "./routes/orderRoute.js";
-import passport from "passport";
-import "./config/passport.js";
+// Load environment variables before importing modules that create external clients.
+const { default: app } = await import("./app.js");
+const { connectDB, disconnectDB } = await import("./config/db.js");
+const { connectRedis, disconnectRedis } = await import("./config/redis.js");
 
-//App Configuration
+const port = process.env.PORT || 4000;
+const host = process.env.HOST || "0.0.0.0";
 
-const app=express()
-const port = process.env.PORT
-const allowedOrigins = (process.env.CORS_ORIGINS || [
-    process.env.CUSTOMER_URL || process.env.FRONTEND_URL,
-    process.env.ADMIN_URL
-].filter(Boolean).join(","))
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean)
+await connectDB();
+await connectRedis();
 
-const isAllowedOrigin = (origin) => {
-    return !origin
-        || allowedOrigins.includes(origin)
-        || /^https:\/\/tomato-(frontend|admin)[a-z0-9-]*\.vercel\.app$/.test(origin)
-}
+const server = app.listen(port, host, () => {
+  console.log(`Server started on ${host}:${port}`);
+});
 
-//middleware
+const shutdown = async (signal) => {
+  console.log(`${signal} received. Shutting down.`);
+  server.close(async () => {
+    await disconnectRedis();
+    await disconnectDB();
+    process.exit(0);
+  });
+};
 
-app.use(express.json())
-app.use(cors({
-    origin: (origin, callback) => {
-        if (isAllowedOrigin(origin)) {
-            callback(null, true);
-            return;
-        }
-
-        callback(new Error(`CORS origin is not allowed: ${origin}`));
-    }
-}))
-app.use(passport.initialize());
-
-//MongoDB connection
-
-connectDB();
-
-//api end-points
-
-app.use("/api/food",foodRouter)
-app.use("/images",express.static('uploads'))
-app.use("/api/user",userRouter)
-app.use("/api/cart",cartRouter)
-app.use("/api/order",orderRouter)
-
-app.get("/",(req,res)=>{
-    res.send("Hari your backend server is working")
-})
-
-app.listen(port,"0.0.0.0",()=>{
-    console.log(`Server started on http://${process.env.HOST}:${port}`)
-})
-
-//mongodb+srv://hari:ZFCoP8THmzdZNjs1@cluster0.wb3zv7j.mongodb.net/?
+process.once("SIGINT", () => shutdown("SIGINT"));
+process.once("SIGTERM", () => shutdown("SIGTERM"));

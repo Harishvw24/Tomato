@@ -4,7 +4,7 @@ import api from '../../api/api'
 import { toast } from 'react-toastify';
 import { assets } from '../../assets/assets';
 
-const Order = ({ url }) => {
+const Order = () => {
   const [orders, setOrders] = useState([]);
   const [date, setDate] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
@@ -31,6 +31,8 @@ const Order = ({ url }) => {
   };
 
   useEffect(() => {
+    // The fetch updates state asynchronously after the request completes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAllOrders();
   }, []);
 
