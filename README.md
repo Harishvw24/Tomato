@@ -64,27 +64,22 @@ The demo covers:
 
 ## 📸 Product Preview
 
-Add screenshots/GIFs here before publishing the project.
-
 ### Customer Experience
 
 `Home → Menu → Food → Cart → Checkout → Orders`
+<img width="1902" height="960" alt="image" src="https://github.com/user-attachments/assets/9d2c944c-9018-4ac0-bb65-c1968ec372d4" />
+
+
+
 
 ### Administration
 
 `Admin Login → Dashboard → Food Management → Customers → Orders`
 
-Recommended screenshots:
+<img width="1918" height="967" alt="image" src="https://github.com/user-attachments/assets/dcd6d2c9-d239-435d-85d6-1802e34c3e31" />
 
-* Customer landing page
-* Menu/category filtering
-* Cart
-* Stripe checkout
-* My Orders
-* AI chatbot
-* Admin dashboard
-* Food management
-* Order management
+
+
 
 ---
 
