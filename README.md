@@ -37,13 +37,13 @@ The project focuses on implementing features commonly found in real-world produc
 
 ### Live Application
 
-[**🌐 View Live Application →**](YOUR_DEPLOYMENT_URL)
+[**🌐 View Live Application →**](https://tomato-frontend-two.vercel.app/)
 
-> Replace the placeholders above with the deployed URLs before publishing the repository.
+
 
 ### Demo Video
 
-📹 **[Watch the full project demonstration](YOUR_DEMO_VIDEO_URL)**
+📹 **[Watch the full project demonstration](https://www.youtube.com/watch?v=OdJpJH8bSr0)**
 
 The demo covers:
 
