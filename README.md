@@ -1,411 +1,590 @@
-# Tomato Food Delivery Platform
+# 🍅 Tomato — Full-Stack Food Delivery Platform
 
-Full-stack food-delivery application with a customer storefront, an admin dashboard, and an Express/MongoDB API. The platform supports menu browsing, guest and authenticated carts, Stripe checkout, order tracking, food-image uploads, Google OAuth, Redis caching, and an optional AI-assisted chatbot.
+> A production-oriented food delivery platform built with **React, Node.js, Express, MongoDB, Redis, Stripe, Google OAuth, Cloudinary, and AI-powered assistance**.
 
-## 1. Project Header
+Tomato is a full-stack food delivery platform designed to demonstrate how a modern web application can combine **customer-facing experiences, administrative operations, secure authentication, payments, caching, media management, automated testing, and AI-assisted functionality** into a single system.
 
-**Project:** Tomato Food Delivery Platform  
-**Repository:** `food-del`  
-**Architecture:** Three independently managed applications in one repository  
-**Status:** Functional full-stack project; production hardening and deployment details remain platform-specific.
+The project consists of three independently managed applications:
 
-## 2. Project Overview
+* 🛒 **Customer Application** — Browse food, manage carts, checkout, track orders, and interact with the chatbot.
+* 🛠️ **Admin Dashboard** — Manage food, customers, orders, and order statuses.
+* ⚙️ **Backend API** — Centralized REST API handling authentication, authorization, business logic, payments, caching, AI services, and external integrations.
 
-Tomato is split into:
+---
 
-- `frontend/`: customer-facing React/Vite web application.
-- `admin/`: protected React/Vite administration dashboard.
-- `backend/`: Express API responsible for authentication, menu data, carts, orders, payments, chatbot requests, caching, and external integrations.
+## ✨ Why Tomato?
 
-Customers can browse categorized food, maintain a cart as a guest or signed-in user, pay through Stripe Checkout, and view order history. Administrators can manage food, review customers and orders, and update order status.
+Tomato was built to go beyond a basic CRUD food-delivery application.
 
-## 3. Live Demo
+The project focuses on implementing features commonly found in real-world production systems:
 
-No verified production URL is stored in this repository. Configure the URLs below for a deployment:
+| Capability        | Implementation                           |
+| ----------------- | ---------------------------------------- |
+| 🔐 Authentication | JWT + Google OAuth 2.0                   |
+| 🛡️ Authorization | Role-Based Access Control                |
+| 💳 Payments       | Stripe Checkout                          |
+| ⚡ Performance     | Redis caching + MongoDB indexes          |
+| 🤖 AI             | AI-assisted food search & order tracking |
+| ☁️ Media          | Cloudinary + Multer                      |
+| 🧪 Testing        | Vitest + MongoDB Memory Server           |
+| 🗄️ Database      | MongoDB + Mongoose                       |
+| 🌐 Frontend       | React + Vite                             |
+| 🔌 API            | Node.js + Express                        |
 
-- Customer app: `<CUSTOMER_APP_URL>`
-- Admin app: `<ADMIN_APP_URL>`
-- API: `<API_URL>`
+---
 
-The backend contains a legacy default allowed origin for `https://tomato-frontend2-lime.vercel.app`; treat it as configuration evidence, not as a verified live demo.
+## 🎥 Demo
 
-## 4. Demo Video
+### Live Application
 
-No demo video is committed or linked in the repository.
+[**🌐 View Live Application →**](YOUR_DEPLOYMENT_URL)
 
-Recommended recording flow:
+> Replace the placeholders above with the deployed URLs before publishing the repository.
 
-1. Browse the menu and filter by category.
-2. Add items as a guest, then register or sign in.
-3. Complete delivery details and Stripe Checkout.
-4. Show the order in **My Orders**.
-5. Sign in to the admin app and demonstrate food management and order-status updates.
+### Demo Video
 
-## 5. Screenshots / Product Preview
+📹 **[Watch the full project demonstration](YOUR_DEMO_VIDEO_URL)**
 
-No screenshots are committed. Suggested preview captures:
+The demo covers:
 
-- Customer home page and menu categories.
-- Food detail/card and cart state.
-- Delivery form and payment redirect.
-- My Orders page with status.
-- Admin food list/add-food form.
-- Admin orders and customer summary views.
+1. Customer registration and login
+2. Google OAuth authentication
+3. Menu browsing and category filtering
+4. Guest cart functionality
+5. Authenticated cart persistence
+6. Checkout and Stripe payment flow
+7. Order history and tracking
+8. AI chatbot interaction
+9. Admin authentication
+10. Food management
+11. Customer management
+12. Order management and status updates
 
-## 6. Key Features
+---
 
-### Customer experience
+## 📸 Product Preview
 
-- Food listing with category filtering.
-- Guest cart persistence in `localStorage`.
-- Authenticated cart persistence in MongoDB.
-- Local email/password registration and login.
-- Optional Google OAuth login.
-- Delivery-information form and Stripe Checkout redirect.
-- Payment verification and order history.
-- Chatbot support for menu search and latest-order tracking.
+Add screenshots/GIFs here before publishing the project.
+
+### Customer Experience
+
+`Home → Menu → Food → Cart → Checkout → Orders`
 
 ### Administration
 
-- Admin-only login and protected routes.
-- Add food with image upload.
-- List and remove food.
-- View all orders.
-- Filter and sort orders in the dashboard.
-- Update order status.
-- View customer records and customer order summaries.
+`Admin Login → Dashboard → Food Management → Customers → Orders`
 
-## 7. Technical Highlights
+Recommended screenshots:
 
-- React 19 and Vite for both web clients.
-- Express 5 API using ES modules.
-- Mongoose models for users, food, orders, and OAuth-code support.
-- JWT authentication with role claims.
-- Google OAuth through Passport when configured.
-- Stripe Checkout session creation.
-- Cloudinary image storage using in-memory Multer uploads.
-- Optional Redis caching with fail-open behavior.
-- OpenAI-compatible chat-completions integration with local fallback matching.
-- Vitest unit tests with MongoDB Memory Server available for isolated tests.
-- Vercel SPA rewrites for both Vite applications.
+* Customer landing page
+* Menu/category filtering
+* Cart
+* Stripe checkout
+* My Orders
+* AI chatbot
+* Admin dashboard
+* Food management
+* Order management
 
-## 8. Tech Stack
+---
 
-| Layer | Technology |
-|---|---|
-| Customer UI | React 19, React Router, Axios, Vite |
-| Admin UI | React 19, React Router, Axios, React Toastify, Vite |
-| API | Node.js 22, Express 5, Body Parser, CORS |
-| Database | MongoDB with Mongoose 9 |
-| Cache | Redis via `redis` client |
-| Authentication | JWT, bcrypt, Passport Google OAuth 2.0 |
-| Payments | Stripe Checkout |
-| Media | Cloudinary, Multer, Streamifier |
-| AI | OpenAI-compatible chat-completions endpoint |
-| Testing | Vitest, MongoDB Memory Server, Supertest dependency |
-| Deployment config | Vercel SPA rewrites for frontend and admin |
+# 🚀 Core Features
 
-Node.js `22.x` and npm `>=10` are declared by all three packages.
+## 👤 Customer Experience
 
-## 9. System Architecture
+### 🍔 Menu & Food Discovery
+
+* Browse available food items
+* Filter food by category
+* View food information and pricing
+* Search food through the chatbot
+
+### 🛒 Smart Cart System
+
+Supports two cart modes:
+
+**Guest users**
+
+* Cart stored locally using `localStorage`
+
+**Authenticated users**
+
+* Cart persisted in MongoDB
+* Cart accessible across authenticated sessions
+
+### 🔐 Authentication
+
+* Email/password registration
+* Secure bcrypt password hashing
+* JWT-based authentication
+* Google OAuth 2.0
+* Authentication state management
+* Protected routes
+
+### 💳 Stripe Checkout
+
+Complete payment workflow:
+
+```text
+Customer
+   ↓
+Cart
+   ↓
+Delivery Information
+   ↓
+Create Order
+   ↓
+Stripe Checkout
+   ↓
+Payment Verification
+   ↓
+Order Confirmation
+```
+
+### 📦 Order Management
+
+Customers can:
+
+* View previous orders
+* View order status
+* Track their latest order
+* Access order history
+
+### 🤖 AI-Assisted Chatbot
+
+The chatbot supports:
+
+* Menu/food discovery
+* Food-related queries
+* Latest-order tracking
+* AI-powered responses when configured
+* Deterministic local matching fallback
+
+This allows the application to remain useful even when an external AI provider is unavailable.
+
+---
+
+# 🛠️ Admin Dashboard
+
+The administrative application provides protected operational functionality.
+
+### Food Management
+
+* Add food
+* Upload food images
+* List food
+* Remove food
+
+### Order Management
+
+* View all orders
+* Filter and sort orders
+* Update order status
+* View customer order summaries
+
+### Customer Management
+
+* View customer records
+* View customer order summaries
+
+### Authorization
+
+Administrative APIs require:
+
+```text
+JWT Authentication
+        +
+Admin Role
+        ↓
+Protected Resource
+```
+
+This prevents regular customers from accessing administrative operations.
+
+---
+
+# 🧠 Engineering Highlights
+
+## 🔐 Authentication + RBAC
+
+Tomato implements authentication and authorization separately.
+
+Authentication answers:
+
+> "Who is this user?"
+
+Authorization answers:
+
+> "What is this user allowed to do?"
+
+JWT tokens contain the user identity and role, while backend middleware enforces administrative permissions.
+
+---
+
+## 🌐 Google OAuth 2.0
+
+Users can authenticate using Google when OAuth credentials are configured.
+
+The authentication flow is:
+
+```text
+User
+ ↓
+Google
+ ↓
+OAuth Callback
+ ↓
+Backend
+ ↓
+User Lookup / Creation
+ ↓
+JWT
+ ↓
+Customer Application
+```
+
+---
+
+## ⚡ Redis Caching
+
+Redis is used to reduce repeated database reads for frequently requested data.
+
+Current caching strategy includes:
+
+```text
+Food List
+TTL → 300 seconds
+
+User Orders
+TTL → 60 seconds
+
+Admin Orders
+TTL → 30 seconds
+```
+
+Order mutations invalidate related cached data to reduce stale results.
+
+Redis is implemented as an **optional dependency** with fail-open behavior, allowing the API to continue operating when Redis is unavailable.
+
+---
+
+## 💳 Payment Architecture
+
+Stripe Checkout is integrated into the order workflow.
+
+```text
+Cart
+ ↓
+Create Order
+ ↓
+Create Stripe Session
+ ↓
+Redirect to Stripe
+ ↓
+Payment
+ ↓
+Verification
+ ↓
+Order Status
+```
+
+> Production hardening should include Stripe webhooks and idempotent payment processing rather than relying solely on browser redirects.
+
+---
+
+## 🤖 AI + Fallback Architecture
+
+The chatbot uses an OpenAI-compatible API when configured.
+
+The application also includes deterministic local matching.
+
+```text
+User Query
+    ↓
+Chat Service
+    ↓
+AI Provider Available?
+   / \
+ Yes  No
+  ↓    ↓
+ AI   Local Matching
+  \    /
+   Response
+```
+
+This architecture prevents the chatbot from becoming completely dependent on an external AI provider.
+
+---
+
+## ☁️ Cloudinary Media Pipeline
+
+Food images are uploaded using Multer and transferred to Cloudinary.
+
+```text
+Browser
+   ↓
+Multer Memory Upload
+   ↓
+Backend
+   ↓
+Cloudinary
+   ↓
+Image URL + Public ID
+   ↓
+MongoDB
+```
+
+The application server therefore does not need to permanently store uploaded images.
+
+---
+
+# 🏗️ System Architecture
 
 ```mermaid
 flowchart LR
-    Customer[Customer React app] -->|Axios REST calls| API[Express API]
-    Admin[Admin React app] -->|JWT REST calls| API
-    API --> Mongo[(MongoDB)]
-    API -. optional cache .-> Redis[(Redis)]
-    API --> Cloudinary[Cloudinary]
-    API --> Stripe[Stripe Checkout]
-    API -. optional .-> Google[Google OAuth]
-    API -. optional .-> AI[OpenAI-compatible API]
+
+    Customer[Customer React App]
+    Admin[Admin React App]
+
+    API[Express REST API]
+
+    Mongo[(MongoDB)]
+    Redis[(Redis)]
+
+    Stripe[Stripe]
+    Cloudinary[Cloudinary]
+    Google[Google OAuth]
+    AI[AI Provider]
+
+    Customer -->|REST / Axios| API
+    Admin -->|REST / JWT| API
+
+    API --> Mongo
+    API -. Optional Cache .-> Redis
+
+    API --> Stripe
+    API --> Cloudinary
+    API -. OAuth .-> Google
+    API -. AI .-> AI
 ```
 
-The request path is generally:
+### Request Lifecycle
 
 ```text
-React view -> API route -> auth/role middleware -> controller -> service/model -> external provider or database
+React UI
+   ↓
+Axios
+   ↓
+REST API
+   ↓
+Authentication / Authorization
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Database / Cache / External Provider
+   ↓
+Response
+   ↓
+React UI
 ```
 
-## 10. Application Workflow
+---
 
-### Browse and cart
+# 🧰 Technology Stack
 
-1. The customer app loads `GET /api/food/list`.
-2. Guests store cart quantities under `localStorage.cartItems`.
-3. Signed-in customers use `/api/cart/add`, `/api/cart/remove`, and `/api/cart/get`; the server stores quantities in `user.cartData`.
-4. On login, the server cart is loaded and the guest cart is removed. The current implementation does not merge both carts.
+| Layer          | Technology                               |
+| -------------- | ---------------------------------------- |
+| Frontend       | React 19, Vite, React Router, Axios      |
+| Admin          | React 19, Vite, React Router             |
+| Backend        | Node.js 22, Express 5                    |
+| Database       | MongoDB, Mongoose                        |
+| Authentication | JWT, bcrypt                              |
+| OAuth          | Passport, Google OAuth 2.0               |
+| Payments       | Stripe Checkout                          |
+| Cache          | Redis                                    |
+| Media          | Cloudinary, Multer, Streamifier          |
+| AI             | OpenAI-compatible API                    |
+| Testing        | Vitest, MongoDB Memory Server            |
+| Deployment     | Vercel-compatible frontend configuration |
 
-### Checkout
+---
 
-1. The customer submits delivery details and cart items.
-2. The API creates an unpaid order and clears the server cart.
-3. The API creates a Stripe Checkout session and returns `session_url`.
-4. Stripe redirects to `/verify` with `success` and `orderId` query parameters.
-5. The customer app calls `/api/order/verify` and navigates to **My Orders** on success.
-
-### Admin order lifecycle
-
-The supported statuses are `Food Processing`, `confirmed`, `preparing`, `out for delivery`, and `delivered`. Admin changes invalidate order-related Redis caches.
-
-## 11. Project Structure
+# 📁 Project Structure
 
 ```text
 food-del/
-├── frontend/                 # Customer React/Vite application
+│
+├── frontend/
 │   └── src/
-│       ├── components/       # Navbar, menu, food cards, chatbot, auth, footer
-│       ├── pages/            # Home, Cart, PlaceOrder, Verify, MyOrders, OAuth
-│       └── Context/           # StoreContext cart and API state
-├── admin/                    # Admin React/Vite application
+│       ├── components/
+│       ├── pages/
+│       └── Context/
+│
+├── admin/
 │   └── src/
-│       ├── Components/       # Navbar, sidebar, protected route
-│       ├── Pages/            # Add, List, Orders, Customers, Login, OAuth
-│       └── api/              # Axios API client and auth interceptor
-└── backend/                  # Express API
-    ├── config/               # Database, Redis, Cloudinary, Passport
-    ├── controllers/          # User, food, cart, order, chat behavior
-    ├── middleware/            # JWT auth, optional auth, role checks
-    ├── models/               # Mongoose schemas
-    ├── routes/               # REST route registration
-    ├── services/              # Cache, upload, food, AI chat services
-    ├── scripts/               # Admin-account utility
-    └── tests/unit/            # Vitest unit tests
+│       ├── Components/
+│       ├── Pages/
+│       └── api/
+│
+└── backend/
+    ├── config/
+    ├── controllers/
+    ├── middleware/
+    ├── models/
+    ├── routes/
+    ├── services/
+    ├── scripts/
+    └── tests/
+        └── unit/
 ```
 
-## 12. Database Design
+---
 
-### `food`
+# 🗄️ Database Design
 
-| Field | Type | Notes |
-|---|---|---|
-| `name` | String | Required |
-| `description` | String | Required |
-| `price` | Number | Required |
-| `image` | String | Required; normally Cloudinary URL |
-| `imagePublicId` | String | Cloudinary deletion reference |
-| `category` | String | Required |
+### User
 
-### `user`
-
-| Field | Type | Notes |
-|---|---|---|
-| `name` | String | Required |
-| `email` | String | Required, unique, lowercase, trimmed |
-| `password` | String | Required for local accounts; bcrypt hash |
-| `role` | Enum | `customer` or `admin` |
-| `provider` | Enum | `local` or `google` |
-| `providerId` | String | Sparse Google provider identifier |
-| `cartData` | Object | Authenticated cart quantities |
-
-### `Orders`
-
-Orders contain `userId`, `items`, `type`, `amount`, `address`, `status`, `date`, and `payment`. Indexes exist on `{ userId: 1, date: -1 }` and `{ date: -1 }`.
-
-### OAuth support
-
-`oauthCodeModel.js` defines an OAuth-code document with expiry and used-state fields, but it is not referenced by the active routes/controllers and is not part of the current login flow.
-
-## 13. API Documentation
-
-Base URL: `http://localhost:4000` locally, or the deployed API URL.
-
-Authentication accepts either `Authorization: Bearer <JWT>` or `token: <JWT>`.
-
-### Public endpoints
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/` | API availability response |
-| `GET` | `/health` | Health response |
-| `GET` | `/api/food/list` | List menu items |
-| `POST` | `/api/user/register` | Create a customer account |
-| `POST` | `/api/user/login` | Authenticate local account |
-| `GET` | `/api/user/google` | Start Google OAuth when configured |
-| `GET` | `/api/user/google/callback` | Complete Google OAuth |
-| `POST` | `/api/order/verify` | Mark or cancel a checkout order |
-| `POST` | `/api/chat/message` | Search menu or track an order |
-
-### Authenticated endpoints
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/api/user/me` | Return current user |
-| `POST` | `/api/cart/add` | Increment a cart item |
-| `POST` | `/api/cart/remove` | Decrement a cart item |
-| `POST` | `/api/cart/get` | Return server cart |
-| `POST` | `/api/order/place` | Create order and Stripe session |
-| `POST` | `/api/order/userorders` | Return current user's orders |
-
-### Admin endpoints
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `POST` | `/api/food/add` | Multipart food creation; field: `image` |
-| `POST` | `/api/food/remove` | Delete food and Cloudinary asset |
-| `GET` | `/api/order/list` | List all orders |
-| `GET` | `/api/order/customer-summary` | Customer order summaries; optional `?date=YYYY-MM-DD` |
-| `PUT` | `/api/order/status/:orderId` | Set a valid order status |
-
-### Example requests
-
-Register:
-
-```json
-POST /api/user/register
-{
-  "name": "Ada Lovelace",
-  "email": "ada@example.com",
-  "password": "at-least-8-characters"
-}
+```text
+User
+├── name
+├── email
+├── password
+├── role
+├── provider
+├── providerId
+└── cartData
 ```
 
-Place order:
+### Food
 
-```json
-POST /api/order/place
-{
-  "items": [{ "_id": "food-id", "name": "Pasta", "price": 12, "quantity": 2 }],
-  "amount": 26,
-  "address": {
-    "firstName": "Ada",
-    "lastName": "Lovelace",
-    "email": "ada@example.com",
-    "street": "1 Example Street",
-    "city": "London",
-    "state": "London",
-    "zipCode": "SW1A 1AA",
-    "country": "UK",
-    "phone": "+440000000000"
-  }
-}
+```text
+Food
+├── name
+├── description
+├── price
+├── image
+├── imagePublicId
+└── category
 ```
 
-The successful order response contains `session_url` for Stripe Checkout. Response shapes consistently include `success` and, where applicable, `message` or `data`.
+### Order
 
-## 14. Authentication & Authorization
+```text
+Order
+├── userId
+├── items
+├── type
+├── amount
+├── address
+├── status
+├── date
+└── payment
+```
 
-- Local registration only creates `customer` accounts.
-- Passwords are validated to a minimum of eight characters and hashed with bcrypt.
-- Login JWTs contain the user ID and role and expire after one day.
-- Google OAuth is enabled only when `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_CALLBACK_URL` are all configured.
-- OAuth state is signed with JWT and expires after ten minutes.
-- Admin routes require both valid JWT authentication and `requireRole("admin")`.
-- Customer tokens are stored as `localStorage.token`; the admin client uses `localStorage.adminToken`.
+Indexes are used for user order history and newest-first order queries.
 
-## 15. Security
+---
 
-Implemented controls include CORS origin allowlisting, JWT checks, role enforcement, bcrypt hashing, email/password validation, a 1 MB JSON body limit, image MIME filtering, and menu-ID validation for AI search results.
+# 🔌 API Overview
 
-Before production use, address these known concerns:
+### Public APIs
 
-- Do not commit or publish `.env` values; rotate any credentials that may have been exposed.
-- Review `backend/scripts/createAdmin.js` before using it operationally because it contains hard-coded account behavior.
-- Protect `/api/order/verify` with ownership and payment verification; it is currently public and trusts the redirect payload.
-- Add Stripe webhooks instead of relying only on the browser redirect.
-- Consider HTTP-only secure cookies instead of `localStorage` tokens.
-- Add Helmet, rate limiting, schema validation, centralized error handling, and audit logging.
-- Configure a strict production CORS allowlist and strong `JWT_SECRET`.
+| Method | Endpoint                    | Purpose             |
+| ------ | --------------------------- | ------------------- |
+| GET    | `/api/food/list`            | Retrieve menu       |
+| POST   | `/api/user/register`        | Register customer   |
+| POST   | `/api/user/login`           | Login               |
+| GET    | `/api/user/google`          | Start Google OAuth  |
+| GET    | `/api/user/google/callback` | OAuth callback      |
+| POST   | `/api/order/verify`         | Verify checkout     |
+| POST   | `/api/chat/message`         | Chatbot interaction |
 
-## 16. Performance & Optimization
+### Authenticated APIs
 
-- Food list cache key: `food:list`, TTL 300 seconds.
-- User order cache key: `orders:user:<userId>`, TTL 60 seconds.
-- Admin order list and summary caches use `orders:*`, TTL 30 seconds.
-- Order mutations invalidate matching order caches.
-- Food queries use lean documents when reading uncached data.
-- Redis is optional and fail-open; the API continues without caching if it is missing or unavailable.
-- Cloudinary upload transformations request automatic format and quality optimization.
-- MongoDB indexes support user order history and newest-first order queries.
+| Method | Endpoint                | Purpose              |
+| ------ | ----------------------- | -------------------- |
+| GET    | `/api/user/me`          | Current user         |
+| POST   | `/api/cart/add`         | Add cart item        |
+| POST   | `/api/cart/remove`      | Remove cart item     |
+| POST   | `/api/cart/get`         | Retrieve cart        |
+| POST   | `/api/order/place`      | Create order         |
+| POST   | `/api/order/userorders` | Retrieve user orders |
 
-## 17. Testing
+### Admin APIs
 
-Backend tests use Vitest with a Node environment and `tests/setup.js`. Current unit coverage targets:
+| Method | Endpoint                      | Purpose             |
+| ------ | ----------------------------- | ------------------- |
+| POST   | `/api/food/add`               | Add food            |
+| POST   | `/api/food/remove`            | Remove food         |
+| GET    | `/api/order/list`             | List orders         |
+| GET    | `/api/order/customer-summary` | Customer summaries  |
+| PUT    | `/api/order/status/:orderId`  | Update order status |
 
-- AI chat service behavior and fallback configuration.
-- Redis connection and cache operations.
-- Chat controller behavior.
-- Food-service caching.
-- Order-controller caching.
+---
 
-Commands:
+# 🧪 Testing
+
+Backend testing is implemented using **Vitest** with MongoDB Memory Server support.
+
+Current unit-test areas include:
+
+* AI chat service
+* Redis operations
+* Chat controller
+* Food-service caching
+* Order-controller caching
+
+### Run tests
 
 ```bash
 cd backend
+
 npm test
+```
+
+Watch mode:
+
+```bash
 npm run test:watch
+```
+
+Coverage:
+
+```bash
 npm run test:coverage
 ```
 
-There are currently no frontend tests, end-to-end tests, or route-level Supertest tests in the repository. Test execution results are environment-dependent and are not claimed here.
+Frontend, end-to-end, and route-level Supertest coverage are not currently implemented.
 
-## 18. Deployment & Infrastructure
+---
 
-The two Vite applications include Vercel rewrites that send all paths to `/index.html`, which supports React Router deep links. The backend has no committed Docker, Render, Railway, Fly.io, AWS, Azure, or serverless deployment configuration.
+# ⚙️ Local Development
 
-A typical deployment uses:
+## Prerequisites
 
-1. One Vercel project for `frontend/`.
-2. One Vercel project for `admin/`.
-3. A Node.js host for `backend/`, with `npm start` as the process command.
-4. Managed MongoDB, Redis, Cloudinary, Stripe, and optional Google/OpenAI-compatible services.
-5. Backend CORS variables pointing only to the deployed customer and admin origins.
+* Node.js 22+
+* npm 10+
+* MongoDB
 
-The backend listens on `HOST` and `PORT`, defaulting to `0.0.0.0:4000`.
+Optional services:
 
-## 19. Environment Variables
+* Redis
+* Stripe
+* Cloudinary
+* Google OAuth
+* OpenAI-compatible AI provider
 
-Create `backend/.env`, `frontend/.env`, and `admin/.env` locally. No `.env.example` is currently committed. Never place real values in this README.
+---
 
-### Backend
-
-| Variable | Required | Purpose / default |
-|---|---:|---|
-| `MONGODB_URI` | Yes | MongoDB connection string |
-| `MONGODB_DNS_SERVERS` | No | DNS fallback; default `8.8.8.8,1.1.1.1` |
-| `JWT_SECRET` | Yes | JWT signing secret |
-| `PORT` | No | API port; default `4000` |
-| `HOST` | No | Bind host; default `0.0.0.0` |
-| `FRONTEND_URL` | Recommended | Customer origin fallback |
-| `CUSTOMER_URL` | Recommended | Customer app URL |
-| `ADMIN_URL` | Recommended | Admin app URL and OAuth destination |
-| `CORS_ORIGINS` | No | Comma-separated additional origins |
-| `REDIS_URL` | No | Redis URL; cache is disabled without it |
-| `STRIPE_SECRET_KEY` | For checkout | Stripe server secret |
-| `CLOUDINARY_CLOUD_NAME` | For uploads | Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | For uploads | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | For uploads | Cloudinary API secret |
-| `CLOUDINARY_FOLDER` | No | Upload folder; default `food-del` |
-| `GOOGLE_CLIENT_ID` | Optional | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | Optional | Google OAuth client secret |
-| `GOOGLE_CALLBACK_URL` | Optional | Google OAuth callback URL |
-| `OPENAI_API_KEY` | Optional | AI chatbot provider key |
-| `OPENAI_MODEL` | No | Model; default `gpt-4o-mini` |
-| `OPENAI_BASE_URL` | No | Provider base URL; default `https://api.openai.com/v1` |
-
-### Customer frontend
-
-| Variable | Default | Purpose |
-|---|---|---|
-| `VITE_API_URL` | `http://localhost:4000` | Backend base URL |
-| `VITE_ADMIN_URL` | Not hard-coded in the customer app | Admin redirect target |
-| `VITE_PORT` | `5180` | Vite development port |
-
-### Admin frontend
-
-| Variable | Default | Purpose |
-|---|---|---|
-| `VITE_API_URL` | `http://localhost:4000` | Backend base URL |
-| `VITE_CUSTOMER_URL` | `http://localhost:5180` | Customer redirect target |
-| `VITE_PORT` | `5181` | Vite development port |
-
-## 20. Installation & Local Setup
-
-Prerequisites: Node.js 22, npm 10+, MongoDB, and optionally Redis, Cloudinary, Stripe, Google OAuth, and an OpenAI-compatible API key.
-
-Install each package:
+## Installation
 
 ```bash
+git clone YOUR_REPOSITORY_URL
+
+cd food-del
+
 cd backend
 npm install
 
@@ -416,98 +595,288 @@ cd ../admin
 npm install
 ```
 
-Start three terminals:
+---
+
+## Start Backend
 
 ```bash
-# terminal 1
 cd backend
 npm run server
 ```
 
+## Start Customer Application
+
 ```bash
-# terminal 2
 cd frontend
 npm run dev
 ```
 
+## Start Admin Application
+
 ```bash
-# terminal 3
 cd admin
 npm run dev
 ```
 
-Default local URLs:
+### Default Local URLs
 
-- API: `http://localhost:4000`
-- Customer app: `http://localhost:5180`
-- Admin app: `http://localhost:5181`
+```text
+Backend   → http://localhost:4000
+Customer  → http://localhost:5180
+Admin     → http://localhost:5181
+```
 
-## 21. Usage
+---
 
-1. Open the customer app and browse the menu.
-2. Add items to the guest cart or sign in to persist the cart server-side.
-3. Register or log in, then open checkout.
-4. Submit delivery details and complete Stripe Checkout using configured test credentials.
-5. View the resulting order under **My Orders**.
-6. Open the admin app, authenticate as an admin, and manage food and order statuses.
-7. Use the chatbot to search available food or inspect the latest order status. Without `OPENAI_API_KEY`, local term matching is used.
+# 🔑 Environment Variables
 
-## 22. Future Improvements
+Create:
 
-- Add Stripe webhook verification and idempotent payment processing.
-- Merge guest and authenticated carts instead of discarding the guest cart at login.
-- Add frontend and end-to-end test coverage.
-- Add request schemas, rate limiting, Helmet, secure cookies, and centralized error handling.
-- Add pagination and richer filtering for menu and admin order views.
-- Add inventory, delivery tracking, refunds, coupons, and notifications.
-- Add a real admin provisioning flow and remove hard-coded credentials from utility scripts.
-- Add CI checks, deployment manifests, `.env.example` files, and API schema generation.
-- Resolve currency presentation so frontend and Stripe amounts use one explicit currency model.
+```text
+backend/.env
+frontend/.env
+admin/.env
+```
 
-## 23. Challenges & Solutions
+Never commit real credentials.
 
-| Challenge | Current solution |
-|---|---|
-| Guest and signed-in cart state | Local storage for guests; user-document cart for authenticated users |
-| Optional infrastructure | Redis connection and cache operations fail open |
-| Image storage | Multer memory upload followed by Cloudinary upload and public-ID tracking |
-| Menu chatbot availability | OpenAI-compatible provider with local term/price matching fallback |
-| Admin access | JWT role claim enforced in both frontend route guards and backend middleware |
-| React Router deployment paths | Vercel rewrites route all paths to the Vite `index.html` |
+### Backend
 
-## 24. What I Learned
+```env
+MONGODB_URI=
+JWT_SECRET=
 
-This project demonstrates practical lessons in:
+PORT=4000
+HOST=0.0.0.0
 
-- Separating customer and administrative interfaces while sharing one API.
-- Designing authentication around both identity and role authorization.
-- Handling optional infrastructure without taking the application offline.
-- Keeping external media out of the application server with Cloudinary.
-- Modeling checkout as an order lifecycle rather than only a payment button.
-- Combining provider-backed AI behavior with deterministic local fallback logic.
-- Using cache keys, TTLs, and invalidation around read-heavy menu and order views.
+FRONTEND_URL=
+CUSTOMER_URL=
+ADMIN_URL=
+CORS_ORIGINS=
 
-## 25. Project Statistics
+REDIS_URL=
 
-Repository snapshot, excluding `backend/coverage` and dependency directories:
+STRIPE_SECRET_KEY=
 
-- 3 independently managed packages.
-- 96 files under `frontend/src`.
-- 27 files under `admin/src`.
-- 82 files under `backend`.
-- 5 backend route modules.
-- 4 primary Mongoose models, including the currently unused OAuth-code model.
-- 6 backend unit-test files.
-- 3 environment-specific Vite/API development ports and services documented above.
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
-Counts are repository snapshots and may change as the project evolves.
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=
 
-## 26. Author
+OPENAI_API_KEY=
+OPENAI_MODEL=
+OPENAI_BASE_URL=
+```
 
-**Author:** Not specified in the package metadata or existing project documentation.
+### Customer
 
-Add the maintainer's name, profile, and contact links here before publishing the project publicly.
+```env
+VITE_API_URL=http://localhost:4000
+VITE_ADMIN_URL=
+VITE_PORT=5180
+```
 
-## 27. License
+### Admin
 
-No project-level license has been provided. The backend package currently declares `ISC`, while the frontend and admin packages do not declare a license. Add a root license file and update package metadata before distributing the repository.
+```env
+VITE_API_URL=http://localhost:4000
+VITE_CUSTOMER_URL=http://localhost:5180
+VITE_PORT=5181
+```
+
+---
+
+# 🔒 Security
+
+Implemented:
+
+* JWT authentication
+* Role-based authorization
+* bcrypt password hashing
+* CORS configuration
+* Email/password validation
+* Image MIME validation
+* Request body limits
+* Menu-ID validation for AI search results
+
+### Production Hardening Roadmap
+
+Before treating the application as production-ready:
+
+* Add Stripe webhooks
+* Implement idempotent payment processing
+* Use secure HTTP-only cookies
+* Add Helmet
+* Add rate limiting
+* Add request schema validation
+* Add centralized error handling
+* Add audit logging
+* Harden CORS configuration
+* Remove hard-coded administrative account behavior
+* Rotate any credentials that may have been exposed
+
+---
+
+# 📈 Performance & Optimization
+
+Tomato includes several performance-oriented techniques:
+
+### Redis
+
+```text
+Food list              → 300s TTL
+User orders            → 60s TTL
+Admin order data       → 30s TTL
+```
+
+### MongoDB
+
+Indexes support:
+
+```text
+userId + date
+date
+```
+
+### API
+
+* Lean MongoDB queries for uncached reads
+* Cache invalidation after mutations
+* Optional Redis architecture
+* Fail-open cache behavior
+
+### Media
+
+Cloudinary transformations provide automatic format and quality optimization.
+
+---
+
+# 🧩 Challenges & Engineering Solutions
+
+| Challenge                    | Solution                               |
+| ---------------------------- | -------------------------------------- |
+| Guest vs authenticated carts | Local storage + MongoDB-backed carts   |
+| Redis availability           | Optional cache with fail-open behavior |
+| Image storage                | Multer memory upload + Cloudinary      |
+| AI provider availability     | AI provider + local fallback           |
+| Admin security               | JWT + role-based middleware            |
+| React Router deployment      | Vercel SPA rewrites                    |
+| Repeated order queries       | Redis caching + invalidation           |
+| OAuth authentication         | Passport + Google OAuth                |
+
+---
+
+# 📚 What This Project Demonstrates
+
+Tomato demonstrates practical experience with:
+
+* Full-stack application architecture
+* REST API design
+* React application development
+* Authentication and authorization
+* OAuth 2.0
+* Role-Based Access Control
+* Payment integration
+* Redis caching
+* MongoDB data modeling
+* Cloud media storage
+* AI integration
+* Automated testing
+* API security
+* Cache invalidation
+* External-service integration
+* Multi-application architecture
+
+---
+
+# 🗺️ Future Roadmap
+
+### Phase 1 — Production Hardening
+
+* Stripe webhook integration
+* Idempotent payment processing
+* Secure HTTP-only authentication cookies
+* Rate limiting
+* Helmet
+* Schema validation
+* Centralized error handling
+* CI/CD pipeline
+
+### Phase 2 — Product Improvements
+
+* Guest/authenticated cart merging
+* Pagination
+* Advanced menu search
+* Coupons and discounts
+* Refund management
+* Notifications
+* Delivery tracking
+* Inventory management
+
+### Phase 3 — Testing & Developer Experience
+
+* Frontend unit tests
+* Integration tests
+* End-to-end tests
+* API documentation
+* OpenAPI/Swagger
+* `.env.example`
+* Automated CI checks
+
+### Phase 4 — AI Expansion
+
+* Natural-language food discovery
+* Personalized recommendations
+* Order assistance
+* Customer support automation
+* Context-aware conversational ordering
+
+---
+
+# 📊 Project Snapshot
+
+| Metric                  | Value |
+| ----------------------- | ----: |
+| Applications            |     3 |
+| Frontend files          |    96 |
+| Admin files             |    27 |
+| Backend files           |    82 |
+| Backend route modules   |     5 |
+| Mongoose models         |     4 |
+| Backend unit-test files |     6 |
+
+> Repository statistics represent the current project snapshot and may change as development continues.
+
+---
+
+# 👨‍💻 Author
+
+**Harish**
+
+Full-Stack Developer | MERN | AI Integration
+
+* GitHub: `YOUR_GITHUB_URL`
+* LinkedIn: `YOUR_LINKEDIN_URL`
+* Portfolio: `YOUR_PORTFOLIO_URL`
+* Email: `YOUR_EMAIL`
+
+---
+
+# 📄 License
+
+No root-level project license is currently defined.
+
+Add an appropriate `LICENSE` file before distributing the project publicly.
+
+---
+
+## ⭐ If You Found This Project Interesting
+
+If this project helped you understand full-stack development, authentication, payments, caching, AI integration, or production-oriented architecture, consider giving the repository a ⭐.
+
+---
+
+> **Built to learn. Built to solve real problems. Built with production engineering principles in mind.**
